@@ -1,0 +1,12 @@
+#include <tunables/global>
+/usr/local/bin/fio-nodeos {
+  #include <abstractions/base>
+  #include <abstractions/nameservice>
+  /etc/ssl/**          r,
+  /var/shm/mongoc-*    rwmk,
+  /etc/fio/nodeos/**   r,
+  /var/lib/fio/data/** rwlk,
+  /var/lib/fio/history_index/** rwlk,
+  /var/lib/fio/history/** rwlk,
+  /etc/fio/nodeos/protocol_features/** rwlk,
+}

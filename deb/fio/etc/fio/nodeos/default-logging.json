@@ -1,0 +1,23 @@
+{
+  "includes": [],
+  "appenders": [{
+    "name": "consoleout",
+    "type": "console",
+    "args": {
+      "stream": "std_out",
+    },
+    "enabled": true
+  }
+  ],
+
+  "loggers": [{
+    "name": "default",
+    "level": "info",
+    "enabled": true,
+    "additivity": false,
+    "appenders": [
+      "consoleout"
+    ]
+  }
+  ]
+}

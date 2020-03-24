@@ -1,0 +1,30 @@
+[Unit]
+Description=FIO keosd service
+After=network.target
+ConditionPathExists=/usr/local/bin/fio-keosd
+
+[Service]
+Type=simple
+Restart=on-failure
+User=fio
+ExecStartPre=+/usr/sbin/logrotate -f /etc/logrotate.d/fio-keosd
+WorkingDirectory=/var/lib/fio
+StandardOutput=file:/var/log/fio/keosd.log
+StandardError=file:/var/log/fio/keosd-error.log
+ExecStart=/usr/local/bin/fio-keosd --config-dir /var/lib/fio/eosio-wallet
+
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/fio
+MemoryDenyWriteExecute=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX
+PrivateUsers=true
+PrivateDevices=true
+PrivateTmp=true
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target
+Alias=fio-keosd.service

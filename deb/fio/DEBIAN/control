@@ -1,0 +1,9 @@
+Package: fioprotocol
+Version: 1.0.x-xxxxxxxxxxxx
+Depends: libssl1.1 (>= 1.1.1), curl (>= 7.0.0)
+Priority: optional
+Architecture: amd64
+Maintainer: Dapix <security@dapix.io>
+Description: FIO testnet setup
+ Basic set of daemons and configuration for joining the FIO testnet.
+

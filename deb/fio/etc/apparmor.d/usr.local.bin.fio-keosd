@@ -1,0 +1,9 @@
+#include <tunables/global>
+/usr/local/bin/fio-keosd {
+  #include <abstractions/base>
+  /var/lib/fio/eosio-wallet/**             r,
+  /var/lib/fio/eosio-wallet/wallet.lock    rwk,
+  /var/lib/fio/eosio-wallet/keosd.sock     rwk,
+  /var/lib/fio/eosio-wallet/fio-wallet/**  rwk,
+}
+

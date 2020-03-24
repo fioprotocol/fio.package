@@ -1,0 +1,32 @@
+[Unit]
+Description=FIO nodeos service
+After=network.target
+ConditionPathExists=/usr/local/bin/fio-nodeos
+
+[Service]
+Type=simple
+Restart=on-failure
+User=fio
+ExecStartPre=+/usr/sbin/logrotate -f /etc/logrotate.d/fio-nodeos
+WorkingDirectory=/var/lib/fio
+StandardOutput=file:/var/log/fio/nodeos.log
+StandardError=file:/var/log/fio/nodeos-error.log
+ExecStart=@/usr/local/bin/fio-nodeos-run fio-nodeos
+
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/fio
+ReadWritePaths=/etc/fio/nodeos/protocol_features
+MemoryDenyWriteExecute=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_INET AF_INET6
+PrivateUsers=true
+PrivateDevices=true
+PrivateTmp=true
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target
+Alias=fio-nodeos.service
+

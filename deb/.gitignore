@@ -1,0 +1,11 @@
+*.tgz
+*.deb
+*.asc
+local-*
+fio/usr/local/bin/*nodeos
+fio/usr/local/bin/*keosd
+fio/usr/local/bin/*cleos
+fio/usr/local/bin/*proxy
+fio/usr/local/bin/clio
+fio/DEBIAN/control.bak
+.idea/
