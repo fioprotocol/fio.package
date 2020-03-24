@@ -24,7 +24,7 @@ it's best to get them directly from the releases section in github.com/fioprotoc
 Quick install instructions:
 
 ```
-wget https://bin.fioprotocol.io/testnet/fioprotocol-1.0.x-latest-ubuntu-18.04-amd64.deb
+wget https://bin.fioprotocol.io/mainnet/fioprotocol-1.0.x-latest-ubuntu-18.04-amd64.deb
 sudo apt-get install ./fioprotocol-1.0.x-latest-ubuntu-18.04-amd64.deb
 sudo systemctl enable fio-nodeos.service
 sudo systemctl start fio-nodeos.service
