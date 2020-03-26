@@ -17,7 +17,6 @@ set -e
 # for details, see https://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-
 case "$1" in
     configure)
         ln -s /usr/local/bin/fio-nodeos /usr/local/bin/nodeos >/dev/null 2>&1 || true
@@ -36,20 +35,6 @@ case "$1" in
 	chown -R fio:fio /var/lib/fio/history /var/lib/fio/history_index
 	systemctl daemon-reload || true
 
-	echo
-	printf "  FFFFFFFFFFFFFFFFFFF IIIIIIIII     OOOOOOO     IIIIIIIII     OOOOOOO\n"
-	printf "  F:::::::::::::::::F I:::::::I   OO::::::::OO  I:::::::I   OO:::::::OO\n"
-	printf "  FF:::::FFFFFFFF:::F II:::::II O:::::OOO:::::O II:::::II O:::::OOO:::::O\n"
-	printf "    F::::F      FFFFF   I:::I  O:::::O   O:::::O  I:::I  O:::::O   O:::::O\n"
-	printf "    F::::F              I:::I  O::::O     O::::O  I:::I  O::::O     O::::O\n"
-	printf "    F:::::FFFFFFFFF     I:::I  O::::O     O::::O  I:::I  O::::O     O::::O\n"
-	printf "    F:::::::::::::F     I:::I  O::::O     O::::O  I:::I  O::::O     O::::O\n"
-	printf "    F:::::FFFFFFFFF     I:::I  O::::O     O::::O  I:::I  O::::O     O::::O\n"
-	printf "    F::::F              I:::I  O::::O     O::::O  I:::I  O::::O     O::::O\n"
-	printf "    F::::F              I:::I  O:::::O   O:::::O  I:::I  O:::::O   O:::::O\n"
-	printf "  FF::::::FF          II:::::II O:::::OOO:::::O II:::::II O:::::OOO:::::O\n"
-	printf "  F:::::::FF          I:::::::I   OO:::::::OO   I:::::::I   OO:::::::OO\n"
-	printf "  FFFFFFFFFF          IIIIIIIII     OOOOOOO     IIIIIIIII     OOOOO0O \n"
 	echo
 	echo "***************************************************************************"
 	echo "*                                                                         *"
