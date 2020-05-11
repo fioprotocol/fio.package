@@ -1,17 +1,6 @@
 #!/bin/bash
 
 /bin/mkdir -p /var/lib/fio/data
-OPTIONS=""
-if [ ! -f /var/lib/fio/.genesis_done ]; then
-    OPTIONS="--genesis-json /etc/fio/nodeos/genesis.json"
-    touch /var/lib/fio/.genesis_done
-fi
-MYIP=$(/usr/bin/curl -m2 -s http://169.254.169.254/latest/meta-data/public-ipv4 2>/dev/null |head -1 |grep -v xml)
-if [ ! -z "$MYIP" ] ; then
-    OPTIONS="--p2p-server-address $MYIP:3856 $OPTIONS"
-fi
 
-trap 'pkill -u fio -n nodeos' SIGINT SIGTERM
-
-exec /usr/local/bin/fio-nodeos --data-dir /var/lib/fio/data --config-dir /etc/fio/nodeos $OPTIONS
+exec /usr/local/bin/fio-nodeos --data-dir /var/lib/fio/data --config-dir /etc/fio/nodeos
 
