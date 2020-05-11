@@ -8,8 +8,6 @@ Notes:
 * Systemd units are installed, but none are enabled at install.
   The availble systemd units are: fio-keosd.service, and fio-nodeos.service
 * Data is stored in /var/lib/fio
-* If initial syncronization fails, or otherwise need to start syncing from genesis, remove the file /var/lib/fio/.genesis_done
-  so that when the service starts it will use the genesis.json file
 * Both nodeos and keosd run under restrictive apparmor profiles, and with additional seccomp rules (via systemd).
 * Log rotation is configured.
 
