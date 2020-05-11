@@ -2,5 +2,5 @@
 
 /bin/mkdir -p /var/lib/fio/data
 
-exec /usr/local/bin/fio-nodeos --data-dir /var/lib/fio/data --config-dir /etc/fio/nodeos
+exec /usr/local/bin/fio-nodeos --data-dir /var/lib/fio/data --config-dir /etc/fio/nodeos --genesis-json /etc/fio/nodeos/genesis.json
 
