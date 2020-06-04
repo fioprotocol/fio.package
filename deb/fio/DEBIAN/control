@@ -1,5 +1,5 @@
 Package: fioprotocol
-Version: 1.0.x-xxxxxxxxxxxx
+Version: 1.1.0-xxxxxxxxxxxx
 Depends: libssl1.1 (>= 1.1.1), curl (>= 7.0.0), libcurl4-gnutls-dev (>= 7.58.0)
 Priority: optional
 Architecture: amd64

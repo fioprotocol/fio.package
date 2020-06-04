@@ -1,7 +1,7 @@
 #!/bin/bash
 
 pushd $(dirname $0)
-VER=v1.0.0
+VER=v1.1.0
 rm -fr ./fioprotocol/*
 mkdir -p ./fioprotocol/${VER}/bin ./fioprotocol/${VER}/etc
 cp ../deb/fio/usr/local/bin/clio ./fioprotocol/${VER}/bin/
