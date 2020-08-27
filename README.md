@@ -50,9 +50,6 @@ This builds a .deb for Ubuntu 18 for quickly bringing up a FIO node. By default 
 
 ### Distribution:
 
-These are being uploaded to https://bin.fioprotocol.io/mainnet/fioprotocol-1.1.x-latest-ubuntu-18.04-amd64.deb, but
-it's best to get them directly from the releases section in github.com/fioprotocol/fio
-
 As of v1.1.0 the Greymass v1 history patch has been incorporated into the main codebase, a separate history build
 will not longer be maintained.
 
