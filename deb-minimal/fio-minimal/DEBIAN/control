@@ -1,9 +1,8 @@
-Package: fioprotocol
+Package: fioprotocol-minimal
 Version: xxxxxxxxxxxx
 Depends: libssl1.1 (>= 1.1.1), curl (>= 7.0.0), libcurl4-gnutls-dev (>= 7.58.0), libicu60, libstdc++6, libtinfo5, zlib1g, libusb-1.0-0
 Priority: optional
 Architecture: amd64
 Maintainer: Dapix <security@dapix.io>
-Description: FIO protocol daemons, systemd, logrotate, apparmor, and utilities
- Full installation for joining the FIO network.
-
+Description: FIO protocol daemons and utilities
+ Minimal installation
