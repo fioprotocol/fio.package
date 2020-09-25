@@ -2,3 +2,7 @@
 .DS_Store
 deb/fio/usr/local/bin/fiotop
 deb/fio/usr/local/bin/fioreq
+*.deb
+*.tgz
+*.asc
+local*
