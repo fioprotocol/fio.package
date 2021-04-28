@@ -47,7 +47,7 @@ Full list of file locations:
     ├── lib
     │   └── fio
     │       ├── data
-    │       └── eosio-wallet
+    │       └── fio-wallet
     │           └── config.ini
     └── log
         └── fio

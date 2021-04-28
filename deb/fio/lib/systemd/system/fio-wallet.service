@@ -11,7 +11,7 @@ ExecStartPre=+/usr/sbin/logrotate -f /etc/logrotate.d/fio-wallet
 WorkingDirectory=/var/lib/fio
 StandardOutput=file:/var/log/fio/wallet.log
 StandardError=file:/var/log/fio/wallet-error.log
-ExecStart=/usr/local/bin/fio-wallet --config-dir /var/lib/fio/eosio-wallet
+ExecStart=/usr/local/bin/fio-wallet --config-dir /var/lib/fio/fio-wallet
 
 NoNewPrivileges=true
 ProtectSystem=strict

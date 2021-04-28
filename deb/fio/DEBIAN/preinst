@@ -17,8 +17,8 @@ set -e
 case "$1" in
     install|upgrade)
             /usr/sbin/adduser --system --home /var/lib/fio --group fio --disabled-login
-            mkdir -p /var/lib/fio/eosio-wallet/fio-wallet /var/lib/fio/data
-            chown -R fio:fio /var/lib/fio/eosio-wallet /var/lib/fio/data
+            mkdir -p /var/lib/fio/fio-wallet/fio-wallet /var/lib/fio/data
+            chown -R fio:fio /var/lib/fio/fio-wallet /var/lib/fio/data
     ;;
 
     abort-upgrade)

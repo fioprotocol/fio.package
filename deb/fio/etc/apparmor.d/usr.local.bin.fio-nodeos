@@ -5,8 +5,8 @@
   /etc/ssl/**          r,
   /var/shm/mongoc-*    rwmk,
   /etc/fio/nodeos/**   r,
-  /var/lib/fio/data/** rwlk,
-  /var/lib/fio/history_index/** rwlk,
-  /var/lib/fio/history/** rwlk,
+  @{HOME}/data/** rwlk,
+  @{HOME}/history_index/** rwlk,
+  @{HOME}/history/** rwlk,
   /etc/fio/nodeos/protocol_features/** rwlk,
 }
