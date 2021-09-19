@@ -1,9 +1,9 @@
 #include <tunables/global>
 /usr/local/bin/fio-wallet {
   #include <abstractions/base>
-  @{HOME}/fio-wallet/**             r,
-  @{HOME}/fio-wallet/wallet.lock    rwk,
-  @{HOME}/fio-wallet/keosd.sock     rwk,
-  @{HOME}/fio-wallet/fio-wallet/**  rwk,
+  @{HOME}/fio-wallet/**              r,
+  @{HOME}/fio-wallet/wallet.lock     rwk,
+  @{HOME}/fio-wallet/fio-wallet.sock rwk,
+  @{HOME}/fio-wallet/fio-wallet/**   rwk,
 }
 
