@@ -6,7 +6,7 @@ No binaries are kept here, they should be copied to the locations below before b
 
 ```
 ./deb/fio/usr/local/bin/fio-nodeos
-./deb/fio/usr/local/bin/fio-keosd
+./deb/fio/usr/local/bin/fio-wallet
 ./deb/fio/usr/local/bin/clio
 ```
 
@@ -17,7 +17,7 @@ putting each version into a distinct directory in /usr/opt/fio and attempts to c
 a structure roughly like the following:
 
 ```/usr/opt/fio/2.0.0/bin/clio
-   /usr/opt/fio/2.0.0/bin/keosd
+   /usr/opt/fio/2.0.0/bin/fio-wallet
    /usr/opt/fio/2.0.0/bin/nodeos
    /usr/opt/fio/2.0.0/license/
    /usr/opt/fio/2.0.0/license/LICENSE

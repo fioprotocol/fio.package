@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VER="2.0.0"
+VER="3.0.0"
 
 cd $(dirname $0)
 rm -f ./fioprotocol-*.deb ./fioprotocol-*.deb.asc ./fioprotocol-*.tgz ./fioprotocol-*.tgz.asc
@@ -13,7 +13,7 @@ if [ ! -f fio/usr/local/bin/fio-nodeos ] ; then
 	echo " *** ERROR *** binaries are missing, copy compiled files to:"
         echo "  ./deb/fio/usr/local/bin/fio-nodeos"
         echo "  ./deb/fio/usr/local/bin/clio"
-        echo "  ./deb/fio/usr/local/bin/fio-keosd "
+        echo "  ./deb/fio/usr/local/bin/fio-wallet "
 	exit 1
 fi
 
@@ -32,7 +32,6 @@ cp ../deb/fio/usr/local/bin/* fio-minimal/usr/opt/fio/${VER}/bin/
 
 pushd fio-minimal/usr/opt/fio/${VER}/bin/ >/dev/null
 rm -f fio-nodeos-run fioreq fiotop
-mv fio-keosd keosd
 mv fio-nodeos nodeos
 pushd ../../..
 tar czf ../../../../fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz fio/

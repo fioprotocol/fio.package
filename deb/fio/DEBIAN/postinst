@@ -22,7 +22,7 @@ case "$1" in
         ln -s /usr/local/bin/fio-nodeos /usr/local/bin/nodeos >/dev/null 2>&1 || true
         ln -s /usr/local/bin/clio /usr/local/bin/fio-cleos >/dev/null 2>&1 || true
         ln -s /usr/local/bin/clio /usr/local/bin/cleos >/dev/null 2>&1 || true
-        ln -s /usr/local/bin/fio-keosd /usr/local/bin/keosd >/dev/null 2>&1 || true
+        ln -s /usr/local/bin/fio-wallet /usr/local/bin/wallet >/dev/null 2>&1 || true
 	ln -s /etc/fio/nodeos/genesis-mainnet.json /etc/fio/nodeos/genesis.json >/dev/null 2>&1 || true
 	[ ! -f /etc/fio/nodeos/config.ini ] && cp /etc/fio/nodeos/mainnet-config.ini /etc/fio/nodeos/config.ini
 	[ ! -f /etc/fio/nodeos/logging.json ] && cp /etc/fio/nodeos/default-logging.json /etc/fio/nodeos/logging.json
