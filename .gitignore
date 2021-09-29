@@ -7,12 +7,8 @@ local-*
 deb/fio/usr/local/bin/*nodeos
 deb/fio/usr/local/bin/*keosd
 deb/fio/usr/local/bin/*cleos
-deb/fio/usr/local/bin/*wallet
 deb/fio/usr/local/bin/*proxy
 deb/fio/usr/local/bin/clio
 deb/fio/usr/local/bin/fiotop
 deb/fio/usr/local/bin/fioreq
-*.deb
-*.tgz
-*.asc
-local*
+control.bak
