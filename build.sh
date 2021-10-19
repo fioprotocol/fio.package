@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VER="3.0.1"
+VER="3.1.0"
 
 cd $(dirname $0)
 rm -f ./fioprotocol-*.deb ./fioprotocol-*.deb.asc ./fioprotocol-*.tgz ./fioprotocol-*.tgz.asc
