@@ -16,21 +16,21 @@ This is a minimal installation, that closely mimics the original Block one packa
 putting each version into a distinct directory in /usr/opt/fio and attempts to create symlinks, resulting in
 a structure roughly like the following:
 
-```/usr/opt/fio/3.0.1/bin/clio
-   /usr/opt/fio/3.0.1/bin/fio-wallet
-   /usr/opt/fio/3.0.1/bin/nodeos
-   /usr/opt/fio/3.0.1/license/
-   /usr/opt/fio/3.0.1/license/LICENSE
-   /usr/opt/fio/3.0.1/license/LICENSE.eosio
-   /usr/opt/fio/3.0.1/license/LICENSE.go
-   /usr/opt/fio/3.0.1/license/LICENSE.secp256k1
-   /usr/opt/fio/3.0.1/license/LICENSE.softfloat
-   /usr/opt/fio/3.0.1/license/LICENSE.wabt
-   /usr/opt/fio/3.0.1/license/LICENSE.wavm
-   /usr/opt/fio/3.0.1/license/LICENSE.yubihsm
-   /usr/bin/clio -> ../opt/fio/3.0.1/bin/clio
-   /usr/bin/fio-wallet -> ../opt/fio/3.0.1/bin/fio-wallet
-   /usr/bin/nodeos -> ../opt/fio/3.0.1/bin/nodeos
+```/usr/opt/fio/3.1.0/bin/clio
+   /usr/opt/fio/3.1.0/bin/fio-wallet
+   /usr/opt/fio/3.1.0/bin/nodeos
+   /usr/opt/fio/3.1.0/license/
+   /usr/opt/fio/3.1.0/license/LICENSE
+   /usr/opt/fio/3.1.0/license/LICENSE.eosio
+   /usr/opt/fio/3.1.0/license/LICENSE.go
+   /usr/opt/fio/3.1.0/license/LICENSE.secp256k1
+   /usr/opt/fio/3.1.0/license/LICENSE.softfloat
+   /usr/opt/fio/3.1.0/license/LICENSE.wabt
+   /usr/opt/fio/3.1.0/license/LICENSE.wavm
+   /usr/opt/fio/3.1.0/license/LICENSE.yubihsm
+   /usr/bin/clio -> ../opt/fio/3.1.0/bin/clio
+   /usr/bin/fio-wallet -> ../opt/fio/3.1.0/bin/fio-wallet
+   /usr/bin/nodeos -> ../opt/fio/3.1.0/bin/nodeos
 ```
 
 ## Tarball
@@ -56,7 +56,7 @@ will not longer be maintained.
 ### Quick install instructions:
 
 ```
-wget https://bin.fioprotocol.io/mainnet/fioprotocol-3.0.x-latest-ubuntu-18.04-amd64.deb
+wget https://bin.fioprotocol.io/mainnet/fioprotocol-3.1.x-latest-ubuntu-18.04-amd64.deb
 sudo apt-get install ./fioprotocol-3.0.x-latest-ubuntu-18.04-amd64.deb
 sudo systemctl enable fio-nodeos.service
 sudo systemctl start fio-nodeos.service
