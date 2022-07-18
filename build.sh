@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-VER="3.1.0"
+VER="3.3.0"
 
 cd $(dirname $0)
 rm -f ./fioprotocol-*.deb ./fioprotocol-*.deb.asc ./fioprotocol-*.tgz ./fioprotocol-*.tgz.asc
@@ -20,7 +20,7 @@ fi
 NOW=$(date -u +%Y%m%d%H%M)
 
 rm -f fio.deb
-sed -i ".bak" "s/xxxxxxxxxxxx/$VER-$NOW/" fio/DEBIAN/control
+sed -i".bak" "s/xxxxxxxxxxxx/$VER-$NOW/" fio/DEBIAN/control
 dpkg-deb --build --root-owner-group fio
 mv fio/DEBIAN/control.bak fio/DEBIAN/control
 mv fio.deb ../fioprotocol-$VER-ubuntu-18.04-amd64.deb
@@ -43,9 +43,8 @@ pushd fio-minimal/usr/bin/ >/dev/null
 ln -s ../opt/fio/${VER}/bin/* .
 popd >/dev/null
 
-sed -i ".bak" "s/xxxxxxxxxxxx/$NOW/" fio-minimal/DEBIAN/control
+sed -i".bak" "s/xxxxxxxxxxxx/$NOW/" fio-minimal/DEBIAN/control
 dpkg-deb --build --root-owner-group fio-minimal
 mv fio-minimal/DEBIAN/control.bak fio-minimal/DEBIAN/control
 mv fio-minimal.deb ../fioprotocol-minimal-$VER-ubuntu-18.04-amd64.deb
 rm -fr fio-minimal/usr
-
