@@ -1,8 +1,7 @@
 .idea/
 .DS_Store
-*.tgz
-*.deb
 *.asc
+dist/
 local-*
 deb/fio/usr/local/bin/*nodeos
 deb/fio/usr/local/bin/*keosd
