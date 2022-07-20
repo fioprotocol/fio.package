@@ -6,7 +6,7 @@ DIR=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 
 mkdir -p $DIR/dist
 rm -f $DIR/dist/fioprotocol-*.deb $DIR/dist/fioprotocol-*.deb.asc $DIR/dist/fioprotocol-*.tgz\
- $DIR/dist/fioprotocol-*.tgz.asc $DIR/dist/md5.out $DIR/dist/sha256.out
+ $DIR/dist/fioprotocol-*.tgz.asc $DIR/dist/checksums.out
 
 # Start with the full debian package
 pushd deb >/dev/null
@@ -76,16 +76,17 @@ rm -rf fio-minimal/usr
 
 pushd -0 >/dev/null && dirs -c
 pushd dist >/dev/null
-echo
-echo "MD5 CheckSum:"
+echo | tee $DIR/dist/checksums.out
+echo "# Checksums:" | tee -a $DIR/dist/checksums.out
+echo "## MD5 (`md5sum --version | grep md5sum`):" | tee -a $DIR/dist/checksums.out
 md5sum fioprotocol-$VER-ubuntu-18.04-amd64.deb fioprotocol-minimal-$VER-ubuntu-18.04-amd64.deb\
- fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz | tee $DIR/dist/md5.out
-echo
-echo "SHA-256 CheckSum:"
+ fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz | tee -a $DIR/dist/checksums.out
+echo | tee -a $DIR/dist/checksums.out
+echo "## SHA-256 (`sha256sum --version | grep sha256sum`):" | tee -a $DIR/dist/checksums.out
 sha256sum fioprotocol-$VER-ubuntu-18.04-amd64.deb fioprotocol-minimal-$VER-ubuntu-18.04-amd64.deb\
- fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz | tee $DIR/dist/sha256.out
-echo
+ fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz | tee -a $DIR/dist/checksums.out
+echo | tee -a $DIR/dist/checksums.out
 
 #NOW=$(date +"%Y%m%d-%H%M%S")
-zip fioprotocol_"${VER}_${NOW}".zip fioprotocol* md5.out sha256.out >/dev/null
+zip fioprotocol_"${VER}_${NOW}".zip fioprotocol* checksums.out >/dev/null
 popd >/dev/null
