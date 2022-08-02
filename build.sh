@@ -76,15 +76,52 @@ rm -rf fio-minimal/usr
 
 pushd -0 >/dev/null && dirs -c
 pushd dist >/dev/null
+md5checksums=$(md5sum fioprotocol-$VER-ubuntu-18.04-amd64.deb fioprotocol-minimal-$VER-ubuntu-18.04-amd64.deb\
+ fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz | tee -a $DIR/dist/checksums.out)
+echo
+echo "# Checksums"
+echo "## MD5 (`md5sum --version | grep md5sum`)"
+IFS=$' \n' read -r -d '' -a arr < <(printf '%s\0' "$md5checksums"); declare -a arr
+length=${#arr[@]}
+for (( j=0; j<=${length}-2; j=j+2 ));
+do
+  echo "${arr[$j+1]}  ${arr[$j]}"
+done
+
+sha256checksums=$(sha256sum fioprotocol-$VER-ubuntu-18.04-amd64.deb fioprotocol-minimal-$VER-ubuntu-18.04-amd64.deb\
+ fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz)
+echo
+echo "## SHA-256 (`sha256sum --version | grep sha256sum`)"
+IFS=$' \n' read -r -d '' -a arr < <(printf '%s\0' "$sha256checksums"); declare -a arr
+for (( j=0; j<=${length}-2; j=j+2 ));
+do
+  echo "${arr[$j+1]}  ${arr[$j]}"
+done
+
+echo
+echo "Pretty-print for Release Notes..."
 echo | tee $DIR/dist/checksums.out
-echo "# Checksums:" | tee -a $DIR/dist/checksums.out
-echo "## MD5 (`md5sum --version | grep md5sum`):" | tee -a $DIR/dist/checksums.out
-md5sum fioprotocol-$VER-ubuntu-18.04-amd64.deb fioprotocol-minimal-$VER-ubuntu-18.04-amd64.deb\
- fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz | tee -a $DIR/dist/checksums.out
+echo "# Checksums" | tee -a $DIR/dist/checksums.out
+echo "## MD5 (`md5sum --version | grep md5sum`)" | tee -a $DIR/dist/checksums.out
+IFS=$' \n' read -r -d '' -a arr < <(printf '%s\0' "$md5checksums"); declare -a arr
+length=${#arr[@]}
+echo '| File | Checksum |' | tee -a $DIR/dist/checksums.out
+echo '| ---- | -------- |' | tee -a $DIR/dist/checksums.out
+for (( j=0; j<=${length}-2; j=j+2 ));
+do
+  echo "|${arr[$j+1]}|${arr[$j]}|" | tee -a $DIR/dist/checksums.out
+done
 echo | tee -a $DIR/dist/checksums.out
-echo "## SHA-256 (`sha256sum --version | grep sha256sum`):" | tee -a $DIR/dist/checksums.out
-sha256sum fioprotocol-$VER-ubuntu-18.04-amd64.deb fioprotocol-minimal-$VER-ubuntu-18.04-amd64.deb\
- fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz | tee -a $DIR/dist/checksums.out
+
+echo "## SHA-256 (`sha256sum --version | grep sha256sum`)" | tee -a $DIR/dist/checksums.out
+IFS=$' \n' read -r -d '' -a arr < <(printf '%s\0' "$sha256checksums"); declare -a arr
+length=${#arr[@]}
+echo '| File | Checksum |' | tee -a $DIR/dist/checksums.out
+echo '| ---- | -------- |' | tee -a $DIR/dist/checksums.out
+for (( j=0; j<=${length}-2; j=j+2 ));
+do
+  echo "|${arr[$j+1]}|${arr[$j]}|" | tee -a $DIR/dist/checksums.out
+done
 echo | tee -a $DIR/dist/checksums.out
 
 #NOW=$(date +"%Y%m%d-%H%M%S")
