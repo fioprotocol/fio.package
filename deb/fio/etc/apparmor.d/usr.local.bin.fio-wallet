@@ -1,9 +1,20 @@
 #include <tunables/global>
 /usr/local/bin/fio-wallet {
   #include <abstractions/base>
-  @{HOME}/fio-wallet/**              r,
-  @{HOME}/fio-wallet/wallet.lock     rwk,
-  @{HOME}/fio-wallet/fio-wallet.sock rwk,
-  @{HOME}/fio-wallet/fio-wallet/**   rwk,
+  # See /var/log/messages, /var/log/kern.log for apparmor logging
+  # 'r' read access
+  # 'w' write access
+  # 'k' used for locking, to be combined with 'w'
+  # 'l' Used for links, i.e. from $HOME/data to /var/lib/fio/data (see below)
+  # if using 'l' remove the rules for the actual files/directories
+  /etc/nsswitch.conf                        r,
+  /etc/passwd                               r,
+  /var/lib/fio/fio-wallet/**                r,
+  /var/lib/fio/fio-wallet/wallet.lock       rwk,
+  /var/lib/fio/fio-wallet/fio-wallet.sock   rwk,
+  /var/lib/fio/fio-wallet/fio-wallet/**     rwk,
+  #@{HOME}/fio-wallet/**                     r,
+  #@{HOME}/fio-wallet/wallet.lock            rwk,
+  #@{HOME}/fio-wallet/fio-wallet.sock        rwk,
+  #@{HOME}/fio-wallet/fio-wallet/**          rwk,
 }
-

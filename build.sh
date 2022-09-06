@@ -16,7 +16,7 @@ if [ ! -f fio/usr/local/bin/fio-nodeos ] ; then
 	echo " *** ERROR *** binaries are missing, copy compiled files to:"
         echo "  ./deb/fio/usr/local/bin/fio-nodeos"
         echo "  ./deb/fio/usr/local/bin/clio"
-        echo "  ./deb/fio/usr/local/bin/fio-wallet "
+        echo "  ./deb/fio/usr/local/bin/fio-wallet"
 	exit 1
 fi
 
