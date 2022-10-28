@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-VER="3.4.0-rc1"
+VER="$1"
+if [[ -z "${VER}" ]]; then
+  echo "ERROR: No argument provided for Version!"
+  echo "  Usage: ./build.sh 3.4.0"
+  exit 1
+fi
 
 DIR=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 
@@ -13,11 +18,13 @@ pushd deb >/dev/null
 chmod 0755 ./fio/usr/local/bin/*
 
 if [ ! -f fio/usr/local/bin/fio-nodeos ] ; then
-	echo " *** ERROR *** binaries are missing, copy compiled files to:"
-        echo "  ./deb/fio/usr/local/bin/fio-nodeos"
-        echo "  ./deb/fio/usr/local/bin/clio"
-        echo "  ./deb/fio/usr/local/bin/fio-wallet"
-	exit 1
+  echo " **************** ERROR ****************"
+  echo " The FIO build artifacts are missing!"
+  echo " - Copy the following FIO ${VER} binaries to ./deb/fio/usr/local/bin"
+  echo "   - nodeos (nodeos -> fio-nodeos)"
+  echo "   - clio"
+  echo "   - fio-wallet"
+  exit 1
 fi
 
 NOW=$(date -u +%Y%m%d%H%M)
