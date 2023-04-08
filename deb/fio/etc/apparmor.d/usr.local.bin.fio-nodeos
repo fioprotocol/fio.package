@@ -2,11 +2,20 @@
 /usr/local/bin/fio-nodeos {
   #include <abstractions/base>
   #include <abstractions/nameservice>
-  /etc/ssl/**          r,
-  /var/shm/mongoc-*    rwmk,
-  /etc/fio/nodeos/**   r,
-  @{HOME}/data/** rwlk,
-  @{HOME}/history_index/** rwlk,
-  @{HOME}/history/** rwlk,
+  # See /var/log/messages, /var/log/kern.log for apparmor logging
+  # 'r' read access
+  # 'w' write access
+  # 'k' used for locking, to be combined with 'w'
+  # 'l' Used for links, i.e. from $HOME/data to /var/lib/fio/data (see below)
+  # if using 'l' remove the rules for the actual files/directories
+  /etc/ssl/**                          r,
+  /var/shm/mongoc-*                    rwmk,
+  /etc/fio/nodeos/**                   r,
   /etc/fio/nodeos/protocol_features/** rwlk,
+  /var/lib/fio/data/**                 rwk,
+  /var/lib/fio/history/**              rwk,
+  /var/lib/fio/history_index/**        rwk,
+  #@{HOME}/data/**                     rwlk,
+  #@{HOME}/history/**                  rwlk,
+  #@{HOME}/history_index/**            rwlk,
 }
