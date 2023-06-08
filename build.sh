@@ -1,13 +1,54 @@
 #!/usr/bin/env bash
 set -x
+
+# Dev Notes
+# redirect stderr to bit bucket: 2>/dev/null
+# redirect both stdout and stderr to bit bucket: >/dev/null 2>&1
+# Negating and grouping multiple conditionals
+# Method #1
+#  if ! { [ -x  ~/fio/3.5/bin/nodeos ] && [ -x ~/fio/3.5/bin/fio-wallet ] && [ -x ~/fio/3.5/bin/clio ]; }; then echo failure; fi
+# Method #2
+#  if ! [ -x  ~/fio/3.5/bin/nodeos -a -x ~/fio/3.5/bin/fio-wallet -a -x ~/fio/3.5/bin/clio ]; then
+
 VER="$1"
 if [[ -z "${VER}" ]]; then
   echo "ERROR: No argument provided for Version!"
-  echo "  Usage: ./build.sh 3.4.0"
+  echo "  Usage: ./build.sh <VERSION> <BIN DIRECTORY>"
+  echo "  Example: ./build.sh X.Y.Z /project/build/bin"
+  echo "  Example: ./build.sh X.Y.Z /install/bin"
   exit 1
 fi
 
+BIN_DIR="$2"
+if [[ -z "${BIN_DIR}" ]]; then
+  echo "ERROR: No argument provided for location of fio binaries!"
+  echo "  Usage: ./build.sh <VERSION> <BINARY DIRECTORY>"
+  echo "  Example: ./build.sh 3.5.0 /project/build/bin"
+  echo "  Example: ./build.sh X.Y.Z /install/bin"
+  exit 1
+fi
+
+# Verify files exist
+if ! [ -x  "${BIN_DIR}"/nodeos -a -x "${BIN_DIR}"/fio-wallet -a -x "${BIN_DIR}"/clio ]; then
+  echo " **************** ERROR ****************"
+  echo " The FIO build artifacts are missing!"
+  echo " - fio-nodeos (nodeos -> fio-nodeos)"
+  echo " - clio"
+  echo " - fio-wallet"
+  exit 1
+fi
+
+# Clean any package bin artifacts
+rm -f ./deb/fio/usr/local/bin/fio-nodeos ./deb/fio/usr/local/bin/clio ./deb/fio/usr/local/bin/fio-wallet
+
+# Copy fio binaries from project bin directory (build/local install) into package bin dir
+cp "${BIN_DIR}"/nodeos ./deb/fio/usr/local/bin/fio-nodeos
+cp "${BIN_DIR}"/clio ./deb/fio/usr/local/bin/
+cp "${BIN_DIR}"/fio-wallet ./deb/fio/usr/local/bin/
+
+# Init constants
 DIR=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+NOW=$(date -u +%Y%m%d%H%M)
 
 mkdir -p ${DIR}/dist
 rm -f ${DIR}/dist/fioprotocol-${VER}-*.deb ${DIR}/dist/fioprotocol-${VER}-*.deb.asc ${DIR}/dist/fioprotocol-${VER}-*.tgz\
@@ -17,23 +58,13 @@ rm -f ${DIR}/dist/fioprotocol-${VER}-*.deb ${DIR}/dist/fioprotocol-${VER}-*.deb.
 pushd deb >/dev/null
 chmod 0755 ./fio/usr/local/bin/*
 
-if [ ! -f fio/usr/local/bin/fio-nodeos ] ; then
-  echo " **************** ERROR ****************"
-  echo " The FIO build artifacts are missing!"
-  echo " - Copy the following FIO ${VER} binaries to ./deb/fio/usr/local/bin"
-  echo "   - fio-nodeos (nodeos -> fio-nodeos)"
-  echo "   - clio"
-  echo "   - fio-wallet"
-  exit 1
-fi
-
-NOW=$(date -u +%Y%m%d%H%M)
-
-# redirect stderr to bit bucket: 2>/dev/null
-# redirect both stdout and stderr to bit bucket: >/dev/null 2>&1
+# Clean any previously generated package debs
 rm -f fio.deb
+
+# Create the control file from the template
 sed "s/xxxxxxxxxxxx/${VER}/; s/tttttttttttt/${NOW}/;" ${DIR}/template/control.fio > fio/DEBIAN/control
 
+# Package up a full install of fio
 echo
 dpkg-deb --build --root-owner-group fio 2>/dev/null
 if [[ $? -ne 0 ]]; then
@@ -45,7 +76,6 @@ rm fio/DEBIAN/control
 mv fio.deb ${DIR}/dist/fioprotocol-${VER}-ubuntu-18.04-amd64.deb
 
 # now the tarball and minimal package, which are almost the same thing.
-pushd ../deb-minimal >/dev/null
 mkdir -p fio-minimal/usr/opt/fio/${VER}/bin/ fio-minimal/usr/opt/fio/${VER}/license/ fio-minimal/usr/bin/
 cp ../deb/fio/usr/local/bin/* fio-minimal/usr/opt/fio/${VER}/bin/
 
@@ -64,16 +94,29 @@ else
   exit 1
 fi
 
+# Clean out opt (populated above)
+pushd fio/${VER}/bin/ >/dev/null
+rm -f nodeos clio fio-wallet
+
+# Return to the deb directory
+popd >/dev/null
 popd >/dev/null
 popd >/dev/null
 
+# Prepare to create the fio-minimal package
 cp ../deb/fio/usr/local/share/fio/LICENSE* fio-minimal/usr/opt/fio/${VER}/license/
 pushd fio-minimal/usr/bin/ >/dev/null
 ln -s ../opt/fio/${VER}/bin/* .
 popd >/dev/null
 
+# Create the control file from the template
+mkdir -p fio-minimal/DEBIAN
 sed "s/xxxxxxxxxxxx/${VER}/; s/tttttttttttt/${NOW}/;" ${DIR}/template/control.fio-minimal > fio-minimal/DEBIAN/control
 
+# Clean any previously generated package debs
+rm -f fio-minimal.deb
+
+# Package up a minimal install of fio
 echo
 dpkg-deb --build --root-owner-group fio-minimal 2>/dev/null
 if [[ $? -ne 0 ]]; then
@@ -81,8 +124,10 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-rm fio-minimal/DEBIAN/control
 mv fio-minimal.deb ${DIR}/dist/fioprotocol-minimal-${VER}-ubuntu-18.04-amd64.deb
+
+# Clean up the minimal package
+rm -rf fio-minimal/DEBIAN
 rm -rf fio-minimal/usr
 
 pushd -0 >/dev/null && dirs -c
