@@ -70,7 +70,7 @@ rm -f ${DIR}/dist/fioprotocol-${VER}-*.deb ${DIR}/dist/fioprotocol-${VER}-*.deb.
 pushd deb >/dev/null
 chmod 0755 ./fio/usr/local/bin/*
 
-# Clean any previously generated package debs
+# Clean any previously generated package deb
 rm -f fio.deb
 
 # Create the control file from the template
