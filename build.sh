@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+#set -x
 
 # Dev Notes
 # redirect stderr to bit bucket: 2>/dev/null
@@ -10,36 +10,48 @@ set -x
 # Method #2
 #  if ! [ -x  ~/fio/3.5/bin/nodeos -a -x ~/fio/3.5/bin/fio-wallet -a -x ~/fio/3.5/bin/clio ]; then
 
-VER="$1"
-if [[ -z "${VER}" ]]; then
-  echo "ERROR: No argument provided for Version!"
-  echo "  Usage: ./build.sh <VERSION> <BIN DIRECTORY>"
-  echo "  Example: ./build.sh X.Y.Z /project/build/bin"
-  echo "  Example: ./build.sh X.Y.Z /install/bin"
-  exit 1
-fi
+function wait_on {
+  echo "Press any key to continue.."
+  while [ true ]; do
+    read -t 3 -n 1
+    if [[ $? = 0 ]]; then
+      break;
+    fi
+  done
+}
 
-BIN_DIR="$2"
+BIN_DIR="$1"
+BIN_DIR="${BIN_DIR/#\~/$HOME}"
 if [[ -z "${BIN_DIR}" ]]; then
   echo "ERROR: No argument provided for location of fio binaries!"
-  echo "  Usage: ./build.sh <VERSION> <BINARY DIRECTORY>"
-  echo "  Example: ./build.sh 3.5.0 /project/build/bin"
-  echo "  Example: ./build.sh X.Y.Z /install/bin"
+  echo "  Usage: ./build.sh <BINARY DIRECTORY>"
+  echo "  Example: ./build.sh /projects/fio/build/bin"
+  echo "  Example: ./build.sh /install/fio/bin"
   exit 1
 fi
 
 # Verify files exist
 if ! [ -x  "${BIN_DIR}"/nodeos -a -x "${BIN_DIR}"/fio-wallet -a -x "${BIN_DIR}"/clio ]; then
   echo " **************** ERROR ****************"
-  echo " The FIO build artifacts are missing!"
-  echo " - fio-nodeos (nodeos -> fio-nodeos)"
+  echo " One or more FIO build artifacts are missing!"
+  echo " - nodeos (nodeos -> fio-nodeos)"
   echo " - clio"
   echo " - fio-wallet"
   exit 1
 fi
 
+# Get version from nodeos binary and verify is as expected
+VER=$($BIN_DIR/nodeos --version)
+VER="${VER#v*}"
+if [[ -z "${VER}" ]]; then
+  echo "ERROR: Unable to determine VERSION from nodeos binary! Unable to proceed - exiting..."
+  exit 1
+fi
+echo -n "Building packages for FIO version ${VER}. "
+wait_on
+
 # Clean any package bin artifacts
-rm -f ./deb/fio/usr/local/bin/fio-nodeos ./deb/fio/usr/local/bin/clio ./deb/fio/usr/local/bin/fio-wallet
+find ./deb/fio/usr/local/bin -maxdepth 1 -type f -not -name "*run" -delete
 
 # Copy fio binaries from project bin directory (build/local install) into package bin dir
 cp "${BIN_DIR}"/nodeos ./deb/fio/usr/local/bin/fio-nodeos
@@ -96,7 +108,7 @@ fi
 
 # Clean out opt (populated above)
 pushd fio/${VER}/bin/ >/dev/null
-rm -f nodeos clio fio-wallet
+rm -f *
 
 # Return to the deb directory
 popd >/dev/null
