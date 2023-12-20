@@ -80,12 +80,5 @@ The gzipped tar file, also a minimal installation, contains the following files;
 
 For distribution the package should be uploaded to the [FIO Releases page](https://github.com/fioprotocol/fio/releases) on GitHub as well as to the FIO S3 bucket noted below.
 
-### Quick install instructions:
-
-```
-wget https://bin.fioprotocol.io/mainnet/fioprotocol-3.4.x-latest-ubuntu-18.04-amd64.deb
-sudo apt-get install ./fioprotocol-3.4.x-latest-ubuntu-18.04-amd64.deb
-sudo systemctl enable fio-nodeos.service
-sudo systemctl start fio-nodeos.service
-tail -f /var/log/fio/nodeos.log
-```
+### Install:
+See https://dev.fio.net/docs/installation-using-packages for package installation instructions.
