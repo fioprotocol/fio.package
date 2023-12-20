@@ -4,14 +4,19 @@
 # Dev Notes
 # redirect stderr to bit bucket: 2>/dev/null
 # redirect both stdout and stderr to bit bucket: >/dev/null 2>&1
+#
 # Negating and grouping multiple conditionals
 # Method #1
 #  if ! { [ -x  ~/fio/3.5/bin/nodeos ] && [ -x ~/fio/3.5/bin/fio-wallet ] && [ -x ~/fio/3.5/bin/clio ]; }; then echo failure; fi
 # Method #2
 #  if ! [ -x  ~/fio/3.5/bin/nodeos -a -x ~/fio/3.5/bin/fio-wallet -a -x ~/fio/3.5/bin/clio ]; then
+#
+# View contents of packages
+# Use dpkg-deb -c <deb file> to view the contents of a debian package
+# Use tar -tvf <tar gzip file> to view the contents of a .tar.gz, .tgz
 
 function wait_on {
-  echo "Press any key to continue.."
+  echo -n "Press any key to continue.."
   while [ true ]; do
     read -t 3 -n 1
     if [[ $? = 0 ]]; then
@@ -84,18 +89,24 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-rm fio/DEBIAN/control
 mv fio.deb ${DIR}/dist/fioprotocol-${VER}-ubuntu-18.04-amd64.deb
 
-# now the tarball and minimal package, which are almost the same thing.
+# now the tarball and minimal package, which are very similar.
 mkdir -p fio-minimal/usr/opt/fio/${VER}/bin/ fio-minimal/usr/opt/fio/${VER}/license/ fio-minimal/usr/bin/
 cp ../deb/fio/usr/local/bin/* fio-minimal/usr/opt/fio/${VER}/bin/
 
+# clean up some full install files
 pushd fio-minimal/usr/opt/fio/${VER}/bin/ >/dev/null
 rm -f fio-nodeos-run fioreq fiotop
-mv fio-nodeos nodeos
 
-pushd ../../.. >/dev/null
+# Return to ./deb
+popd >/dev/null
+
+# Copy the license files in for the tar gzip and fio-minimal packages
+cp fio/usr/local/share/fio/LICENSE* fio-minimal/usr/opt/fio/${VER}/license/
+
+# Now create the tar gzip
+pushd fio-minimal/usr/opt >/dev/null
 echo
 tar czf ${DIR}/dist/fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz fio/ >/dev/null
 if [[ $? -eq 0 ]]; then
@@ -106,19 +117,14 @@ else
   exit 1
 fi
 
-# Clean out opt (populated above)
-pushd fio/${VER}/bin/ >/dev/null
-rm -f *
-
 # Return to the deb directory
 popd >/dev/null
-popd >/dev/null
-popd >/dev/null
 
-# Prepare to create the fio-minimal package
-cp ../deb/fio/usr/local/share/fio/LICENSE* fio-minimal/usr/opt/fio/${VER}/license/
+# Create the sym links for the fio-minimal package
 pushd fio-minimal/usr/bin/ >/dev/null
 ln -s ../opt/fio/${VER}/bin/* .
+
+# Return to the deb directory
 popd >/dev/null
 
 # Create the control file from the template
@@ -136,9 +142,15 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
+# Move to dist
 mv fio-minimal.deb ${DIR}/dist/fioprotocol-minimal-${VER}-ubuntu-18.04-amd64.deb
 
-# Clean up the minimal package
+# Clean up the fio and fio-minimal directory structure
+rm fio/usr/local/bin/fio-nodeos
+rm fio/usr/local/bin/clio
+rm fio/usr/local/bin/fio-wallet
+rm fio/DEBIAN/control
+
 rm -rf fio-minimal/DEBIAN
 rm -rf fio-minimal/usr
 
