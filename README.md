@@ -40,35 +40,35 @@ A full FIO installation, containing apparmor, logging, daemon and fio-nodeos con
 ### Minimal Ubuntu package "fioprotocol-minimal-x.x.x-ubuntu-18.04-amd64.deb"
 The minimal installation, closely resembling the original Block.one package install, contains the following files;
 a structure as follows:
-```/usr/opt/fio/3.4.0/bin/clio
-   /usr/opt/fio/3.4.0/bin/fio-wallet
-   /usr/opt/fio/3.4.0/bin/nodeos
-   /usr/opt/fio/3.4.0/license/LICENSE
-   /usr/opt/fio/3.4.0/license/LICENSE.eosio
-   /usr/opt/fio/3.4.0/license/LICENSE.go
-   /usr/opt/fio/3.4.0/license/LICENSE.secp256k1
-   /usr/opt/fio/3.4.0/license/LICENSE.softfloat
-   /usr/opt/fio/3.4.0/license/LICENSE.wabt
-   /usr/opt/fio/3.4.0/license/LICENSE.wavm
-   /usr/opt/fio/3.4.0/license/LICENSE.yubihsm
-   /usr/bin/clio -> ../opt/fio/3.4.0/bin/clio
-   /usr/bin/fio-wallet -> ../opt/fio/3.4.0/bin/fio-wallet
-   /usr/bin/nodeos -> ../opt/fio/3.4.0/bin/nodeos
+```/usr/opt/fio/3.5.0/bin/clio
+   /usr/opt/fio/3.5.0/bin/fio-wallet
+   /usr/opt/fio/3.5.0/bin/nodeos
+   /usr/opt/fio/3.5.0/license/LICENSE
+   /usr/opt/fio/3.5.0/license/LICENSE.eosio
+   /usr/opt/fio/3.5.0/license/LICENSE.go
+   /usr/opt/fio/3.5.0/license/LICENSE.secp256k1
+   /usr/opt/fio/3.5.0/license/LICENSE.softfloat
+   /usr/opt/fio/3.5.0/license/LICENSE.wabt
+   /usr/opt/fio/3.5.0/license/LICENSE.wavm
+   /usr/opt/fio/3.5.0/license/LICENSE.yubihsm
+   /usr/bin/clio -> ../opt/fio/3.5.0/bin/clio
+   /usr/bin/fio-wallet -> ../opt/fio/3.5.0/bin/fio-wallet
+   /usr/bin/nodeos -> ../opt/fio/3.5.0/bin/nodeos
 ```
 
 ### Tarball
 The gzipped tar file, also a minimal installation, contains the following files;
-```fio/3.4.0/bin/clio
-   fio/3.4.0/bin/fio-wallet
-   fio/3.4.0/bin/nodeos
-   fio/3.4.0/license/LICENSE
-   fio/3.4.0/license/LICENSE.eosio
-   fio/3.4.0/license/LICENSE.go
-   fio/3.4.0/license/LICENSE.secp256k1
-   fio/3.4.0/license/LICENSE.softfloat
-   fio/3.4.0/license/LICENSE.wabt
-   fio/3.4.0/license/LICENSE.wavm
-   fio/3.4.0/license/LICENSE.yubihsm
+```fio/3.5.0/bin/clio
+   fio/3.5.0/bin/fio-wallet
+   fio/3.5.0/bin/nodeos
+   fio/3.5.0/license/LICENSE
+   fio/3.5.0/license/LICENSE.eosio
+   fio/3.5.0/license/LICENSE.go
+   fio/3.5.0/license/LICENSE.secp256k1
+   fio/3.5.0/license/LICENSE.softfloat
+   fio/3.5.0/license/LICENSE.wabt
+   fio/3.5.0/license/LICENSE.wavm
+   fio/3.5.0/license/LICENSE.yubihsm
 ```
 
 ### Build Notes:
