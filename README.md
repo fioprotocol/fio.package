@@ -2,8 +2,7 @@
 
 Creates the distributable packages for the fio protocol.
 
-This builds deb packages as well as tarball for Ubuntu 18, providing a quick and straightforward process to stand up a FIO node. By default it is configured to connect to 'mainnet', however, the 'testnet' configuration is also provided. See
-`/etc/fio/nodeos/` for testnet genesis.json and config.ini files.
+This builds deb packages as well as tarball of the FIO blockchain binaries including fio-nodeos, fio-wallet and clio. These packages provide a quick and straightforward process to stand up a FIO node. By default, fio-nodeos is configured to connect to 'mainnet', however, the 'testnet' configuration is also provided. See `/etc/fio/nodeos/` for the testnet genesis.json and config.ini files.
 
 To execute, run `./build.sh`, providing the location of the fio binaries, i.e. /home/ubuntu/fio/bin. The build script will copy the binaries into ./deb and then create the packages. Note, the package will include the fio version, determined by executing `nodeos --version`
 
