@@ -25,6 +25,18 @@ function wait_on {
   done
 }
 
+# Checks for Arch and OS + Support for tests setting them manually
+echo "Performing OS/System Validation..."
+[[ -z "${ARCH}" ]] && export ARCH=$(uname)
+if [[ $ARCH == "Linux" ]]; then
+  [[ ! -e /etc/os-release ]] && echo " /etc/os-release not found! Possible unsupported Linux distribution." && exit 1
+  # Obtain OS NAME, and VERSION
+  . /etc/os-release
+else
+  echo " FIO is not supported for your Architecture!${COLOR_NC}" && exit 1
+fi
+([[ $NAME == "Ubuntu" ]] && ([[ "$(echo ${VERSION_ID})" == "18.04" ]] || [[ "$(echo ${VERSION_ID})" == "20.04" ]] || [[ "$(echo ${VERSION_ID})" == "22.04" ]])) || (echo " - You must be running Ubuntu 18.04, 20.04 or 22.04 to build FIO packages." && exit 1)
+
 BIN_DIR="$1"
 BIN_DIR="${BIN_DIR/#\~/$HOME}"
 if [[ -z "${BIN_DIR}" ]]; then
@@ -46,13 +58,13 @@ if ! [ -x  "${BIN_DIR}"/nodeos -a -x "${BIN_DIR}"/fio-wallet -a -x "${BIN_DIR}"/
 fi
 
 # Get version from nodeos binary and verify is as expected
-VER=$($BIN_DIR/nodeos --version)
-VER="${VER#v*}"
-if [[ -z "${VER}" ]]; then
+FIO_VERSION=$($BIN_DIR/nodeos --version)
+FIO_VERSION="${FIO_VERSION#v*}"
+if [[ -z "${FIO_VERSION}" ]]; then
   echo "ERROR: Unable to determine VERSION from nodeos binary! Unable to proceed - exiting..."
   exit 1
 fi
-echo -n "Building packages for FIO version ${VER}. "
+echo -n "Building packages for FIO version ${FIO_VERSION}. "
 wait_on
 
 # Clean any package bin artifacts
@@ -68,8 +80,8 @@ DIR=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 NOW=$(date -u +%Y%m%d%H%M)
 
 mkdir -p ${DIR}/dist
-rm -f ${DIR}/dist/fioprotocol-${VER}-*.deb ${DIR}/dist/fioprotocol-${VER}-*.deb.asc ${DIR}/dist/fioprotocol-${VER}-*.tgz\
- ${DIR}/dist/fioprotocol-${VER}-*.tgz.asc ${DIR}/dist/checksums_${VER}.out
+rm -f ${DIR}/dist/fioprotocol-${FIO_VERSION}-*.deb ${DIR}/dist/fioprotocol-${FIO_VERSION}-*.deb.asc ${DIR}/dist/fioprotocol-${FIO_VERSION}-*.tgz\
+ ${DIR}/dist/fioprotocol-${FIO_VERSION}-*.tgz.asc ${DIR}/dist/checksums_${FIO_VERSION}.out
 
 # Start with the full debian package
 pushd deb >/dev/null
@@ -79,7 +91,7 @@ chmod 0755 ./fio/usr/local/bin/*
 rm -f fio.deb
 
 # Create the control file from the template
-sed "s/xxxxxxxxxxxx/${VER}/; s/tttttttttttt/${NOW}/;" ${DIR}/template/control.fio > fio/DEBIAN/control
+sed "s/xxxxxxxxxxxx/${FIO_VERSION}/; s/tttttttttttt/${NOW}/;" ${DIR}/template/control.fio > fio/DEBIAN/control
 
 # Package up a full install of fio
 echo
@@ -89,29 +101,29 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-mv fio.deb ${DIR}/dist/fioprotocol-${VER}-ubuntu-18.04-amd64.deb
+mv fio.deb ${DIR}/dist/fioprotocol-${FIO_VERSION}-ubuntu-${VERSION_ID}-amd64.deb
 
 # now the tarball and minimal package, which are very similar.
-mkdir -p fio-minimal/usr/opt/fio/${VER}/bin/ fio-minimal/usr/opt/fio/${VER}/license/ fio-minimal/usr/bin/
-cp ../deb/fio/usr/local/bin/* fio-minimal/usr/opt/fio/${VER}/bin/
+mkdir -p fio-minimal/usr/opt/fio/${FIO_VERSION}/bin/ fio-minimal/usr/opt/fio/${FIO_VERSION}/license/ fio-minimal/usr/bin/
+cp ../deb/fio/usr/local/bin/* fio-minimal/usr/opt/fio/${FIO_VERSION}/bin/
 
 # clean up some full install files
-pushd fio-minimal/usr/opt/fio/${VER}/bin/ >/dev/null
+pushd fio-minimal/usr/opt/fio/${FIO_VERSION}/bin/ >/dev/null
 rm -f fio-nodeos-run fioreq fiotop
 
 # Return to ./deb
 popd >/dev/null
 
 # Copy the license files in for the tar gzip and fio-minimal packages
-cp fio/usr/local/share/fio/LICENSE* fio-minimal/usr/opt/fio/${VER}/license/
+cp fio/usr/local/share/fio/LICENSE* fio-minimal/usr/opt/fio/${FIO_VERSION}/license/
 
 # Now create the tar gzip
 pushd fio-minimal/usr/opt >/dev/null
 echo
-tar czf ${DIR}/dist/fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz fio/ >/dev/null
+tar czf ${DIR}/dist/fioprotocol-"${FIO_VERSION}"-ubuntu-${VERSION_ID}-amd64.tgz fio/ >/dev/null
 if [[ $? -eq 0 ]]; then
   echo "TARBALL Contents: "
-  tar -tvzf ${DIR}/dist/fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz
+  tar -tvzf ${DIR}/dist/fioprotocol-"${FIO_VERSION}"-ubuntu-${VERSION_ID}-amd64.tgz
 else
   echo "ERROR: unable to create fio-minimal package using dpkg-deb! Exiting..."
   exit 1
@@ -122,14 +134,14 @@ popd >/dev/null
 
 # Create the sym links for the fio-minimal package
 pushd fio-minimal/usr/bin/ >/dev/null
-ln -s ../opt/fio/${VER}/bin/* .
+ln -s ../opt/fio/${FIO_VERSION}/bin/* .
 
 # Return to the deb directory
 popd >/dev/null
 
 # Create the control file from the template
 mkdir -p fio-minimal/DEBIAN
-sed "s/xxxxxxxxxxxx/${VER}/; s/tttttttttttt/${NOW}/;" ${DIR}/template/control.fio-minimal > fio-minimal/DEBIAN/control
+sed "s/xxxxxxxxxxxx/${FIO_VERSION}/; s/tttttttttttt/${NOW}/;" ${DIR}/template/control.fio-minimal > fio-minimal/DEBIAN/control
 
 # Clean any previously generated package debs
 rm -f fio-minimal.deb
@@ -143,7 +155,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Move to dist
-mv fio-minimal.deb ${DIR}/dist/fioprotocol-minimal-${VER}-ubuntu-18.04-amd64.deb
+mv fio-minimal.deb ${DIR}/dist/fioprotocol-minimal-${FIO_VERSION}-ubuntu-${VERSION_ID}-amd64.deb
 
 # Clean up the fio and fio-minimal directory structure
 rm fio/usr/local/bin/fio-nodeos
@@ -156,8 +168,8 @@ rm -rf fio-minimal/usr
 
 pushd -0 >/dev/null && dirs -c
 pushd dist >/dev/null
-md5checksums=$(md5sum fioprotocol-${VER}-ubuntu-18.04-amd64.deb fioprotocol-minimal-${VER}-ubuntu-18.04-amd64.deb\
- fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz | tee -a ${DIR}/dist/checksums_${VER}.out)
+md5checksums=$(md5sum fioprotocol-${FIO_VERSION}-ubuntu-${VERSION_ID}-amd64.deb fioprotocol-minimal-${FIO_VERSION}-ubuntu-${VERSION_ID}-amd64.deb\
+ fioprotocol-"${FIO_VERSION}"-ubuntu-${VERSION_ID}-amd64.tgz | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out)
 echo
 echo "# Checksums"
 echo "## MD5 (`md5sum --version | grep md5sum`)"
@@ -168,8 +180,8 @@ do
   echo "${arr[$j+1]}  ${arr[$j]}"
 done
 
-sha256checksums=$(sha256sum fioprotocol-${VER}-ubuntu-18.04-amd64.deb fioprotocol-minimal-${VER}-ubuntu-18.04-amd64.deb\
- fioprotocol-"${VER}"-ubuntu-18.04-amd64.tgz)
+sha256checksums=$(sha256sum fioprotocol-${FIO_VERSION}-ubuntu-${VERSION_ID}-amd64.deb fioprotocol-minimal-${FIO_VERSION}-ubuntu-${VERSION_ID}-amd64.deb\
+ fioprotocol-"${FIO_VERSION}"-ubuntu-${VERSION_ID}-amd64.tgz)
 echo
 echo "## SHA-256 (`sha256sum --version | grep sha256sum`)"
 IFS=$' \n' read -r -d '' -a arr < <(printf '%s\0' "$sha256checksums"); declare -a arr
@@ -180,30 +192,30 @@ done
 
 echo
 echo "Pretty-print for Release Notes..."
-echo | tee ${DIR}/dist/checksums_${VER}.out
-echo "# Checksums" | tee -a ${DIR}/dist/checksums_${VER}.out
-echo "## MD5 (`md5sum --version | grep md5sum`)" | tee -a ${DIR}/dist/checksums_${VER}.out
+echo | tee ${DIR}/dist/checksums_${FIO_VERSION}.out
+echo "# Checksums" | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out
+echo "## MD5 (`md5sum --version | grep md5sum`)" | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out
 IFS=$' \n' read -r -d '' -a arr < <(printf '%s\0' "$md5checksums"); declare -a arr
 length=${#arr[@]}
-echo '| File | Checksum |' | tee -a ${DIR}/dist/checksums_${VER}.out
-echo '| ---- | -------- |' | tee -a ${DIR}/dist/checksums_${VER}.out
+echo '| File | Checksum |' | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out
+echo '| ---- | -------- |' | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out
 for (( j=0; j<=${length}-2; j=j+2 ));
 do
-  echo "|${arr[$j+1]}|${arr[$j]}|" | tee -a ${DIR}/dist/checksums_${VER}.out
+  echo "|${arr[$j+1]}|${arr[$j]}|" | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out
 done
-echo | tee -a ${DIR}/dist/checksums_${VER}.out
+echo | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out
 
-echo "## SHA-256 (`sha256sum --version | grep sha256sum`)" | tee -a ${DIR}/dist/checksums_${VER}.out
+echo "## SHA-256 (`sha256sum --version | grep sha256sum`)" | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out
 IFS=$' \n' read -r -d '' -a arr < <(printf '%s\0' "$sha256checksums"); declare -a arr
 length=${#arr[@]}
-echo '| File | Checksum |' | tee -a ${DIR}/dist/checksums_${VER}.out
-echo '| ---- | -------- |' | tee -a ${DIR}/dist/checksums_${VER}.out
+echo '| File | Checksum |' | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out
+echo '| ---- | -------- |' | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out
 for (( j=0; j<=${length}-2; j=j+2 ));
 do
-  echo "|${arr[$j+1]}|${arr[$j]}|" | tee -a ${DIR}/dist/checksums_${VER}.out
+  echo "|${arr[$j+1]}|${arr[$j]}|" | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out
 done
-echo | tee -a ${DIR}/dist/checksums_${VER}.out
+echo | tee -a ${DIR}/dist/checksums_${FIO_VERSION}.out
 
 # Zip up this distro. Use timestamp for uniqueness.
-zip fioprotocol_"${VER}_${NOW}".zip fioprotocol*${VER}* checksums_${VER}.out >/dev/null
+zip fioprotocol_"${FIO_VERSION}_${NOW}".zip fioprotocol*${FIO_VERSION}* checksums_${FIO_VERSION}.out >/dev/null
 popd >/dev/null
